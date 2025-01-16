@@ -12,7 +12,6 @@ public class BallController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-        // Optionally enable Interpolation for smooth visuals
         rb.interpolation = RigidbodyInterpolation.Interpolate;
     }
 

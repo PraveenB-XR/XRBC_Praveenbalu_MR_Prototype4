@@ -8188,14 +8188,10 @@ MonoBehaviour:
   vrHand: {fileID: 50406549}
   followSpeed: 100
   maxPaddleSpeed: 0.1
-  useFallbackRaycast: 1
-  rayCountWidth: 10
-  rayCountHeight: 10
-  rayDistance: 0.5
-  nudgeImpulse: 0.48
-  minPaddleSpeedForNudge: 3
-  directionBlend: 0.604
-  showDebugRays: 1
+  paddleRadius: 0.1
+  nudgeForce: 2
+  maxSweepDistance: 1
+  showDebugCapsule: 1
   debugLogs: 1
 --- !u!1 &583942384
 GameObject:
