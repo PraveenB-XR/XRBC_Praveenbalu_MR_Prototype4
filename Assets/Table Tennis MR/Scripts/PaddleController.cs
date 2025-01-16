@@ -3,17 +3,30 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PaddleController : MonoBehaviour
 {
-    [Header("Paddle Movement Settings")]
-    public Transform vrHand;                 // VR controller or hand transform
-    public float followSpeed = 20f;          // Speed at which the paddle follows the VR hand
-    public float maxPaddleSpeed = 8f;        // Maximum allowed paddle velocity
+    [Header("VR Hand/Movement")]
+    [Tooltip("The VR controller or hand transform that the paddle should follow.")]
+    public Transform vrHand;                 
 
-    [Header("Capsule Sweep Settings")]
-    public float paddleRadius = 0.1f;        // Radius of the paddle for capsule sweep
-    public float nudgeForce = 2f;            // Minimal force applied to correct tunneling
-    public float maxSweepDistance = 1f;      // Maximum distance for the capsule sweep
+    [Tooltip("How dwquickly the paddle follows the hand's position/rotation.")]
+    public float followSpeed = 20f;
 
-    [Header("Debug Options")]
+    [Tooltip("Maximum speed the paddle can move. Reduces overpowered hits.")]
+    public float maxPaddleSpeed = 8f;
+
+    [Header("Capsule Sweep Fallback")]
+    [Tooltip("Radius used in capsule sweep to detect near misses.")]
+    public float paddleRadius = 0.1f;
+    
+    [Tooltip("Small impulse used if the sweep detects a missed collision.")]
+    public float nudgeForce = 2f;
+
+    [Tooltip("Maximum distance for the capsule sweep (based on how far the paddle moves per frame).")]
+    public float maxSweepDistance = 0.5f;
+    
+    [Tooltip("Minimum relative speed of paddle before we apply a nudge.")]
+    public float minNudgePaddleSpeed = 2f;
+
+    [Header("Debug")]
     public bool showDebugCapsule = false;
     public bool debugLogs = false;
 
@@ -24,7 +37,11 @@ public class PaddleController : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
+        // Paddle is Kinematic since we directly control it via MovePosition.
         rb.isKinematic = true;
+
+        // Continuous Speculative helps for kinematic bodies.
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
 
@@ -33,65 +50,104 @@ public class PaddleController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        FollowHand();
+        FollowVRHand();
         PerformCapsuleSweep();
     }
 
-    private void FollowHand()
+    /// <summary>
+    /// Smoothly move/rotate the paddle to the VR hand while clamping velocity.
+    /// </summary>
+    private void FollowVRHand()
     {
-        if (vrHand == null) return;
+        if (vrHand == null)
+            return;
 
-        // Smoothly move and rotate the paddle to follow the VR hand
-        Vector3 targetPosition = Vector3.Lerp(transform.position, vrHand.position, followSpeed * Time.fixedDeltaTime);
-        Quaternion targetRotation = Quaternion.Lerp(transform.rotation, vrHand.rotation, followSpeed * Time.fixedDeltaTime);
+        // Lerp to the hand's position/rotation for a smoother feel.
+        Vector3 targetPos = Vector3.Lerp(transform.position, vrHand.position, followSpeed * Time.fixedDeltaTime);
+        Quaternion targetRot = Quaternion.Lerp(transform.rotation, vrHand.rotation, followSpeed * Time.fixedDeltaTime);
 
-        rb.MovePosition(targetPosition);
-        rb.MoveRotation(targetRotation);
+        rb.MovePosition(targetPos);
+        rb.MoveRotation(targetRot);
 
-        // Calculate paddle velocity
+        // Calculate paddle velocity (for potential collision logic).
         paddleVelocity = (transform.position - previousPosition) / Time.fixedDeltaTime;
-
-        // Clamp paddle velocity
+        
+        // Limit the paddle velocity to avoid overpowered hits.
         if (paddleVelocity.magnitude > maxPaddleSpeed)
         {
             paddleVelocity = paddleVelocity.normalized * maxPaddleSpeed;
         }
 
-        previousPosition = transform.position; // Update for the next frame
+        previousPosition = transform.position;
     }
 
+    /// <summary>
+    /// Capsule sweep to catch missed collisions (tunneling). 
+    /// If we detect the ball, we apply a small nudge to correct it.
+    /// </summary>
     private void PerformCapsuleSweep()
     {
-        Vector3 start = previousPosition;                           // Starting point of the capsule
-        Vector3 end = transform.position;                          // End point of the capsule
-        float sweepDistance = Vector3.Distance(start, end);
+        // If the paddle isn't moving quickly enough, we won't nudge.
+        if (paddleVelocity.magnitude < minNudgePaddleSpeed)
+            return;
 
-        if (sweepDistance > maxSweepDistance) return;              // Skip if the distance exceeds the sweep range
+        Vector3 startPos = previousPosition;
+        Vector3 endPos = transform.position;
+        float sweepDist = Vector3.Distance(startPos, endPos);
 
-        if (Physics.CapsuleCast(start, end, paddleRadius, paddleVelocity.normalized, out RaycastHit hit, sweepDistance))
+        // Only sweep if the paddle moved less than our threshold in this frame.
+        // If the user teleported the paddle or something, we ignore it here.
+        if (sweepDist > maxSweepDistance)
+            return;
+
+        // Raycast in the direction of movement with a capsule.
+        if (Physics.CapsuleCast(startPos, endPos, paddleRadius, paddleVelocity.normalized, out RaycastHit hit, sweepDist))
         {
             if (hit.collider.CompareTag("Ball"))
             {
                 Rigidbody ballRb = hit.collider.attachedRigidbody;
                 if (ballRb != null)
                 {
-                    // Apply a small nudge force to the ball to correct tunneling
-                    Vector3 reflection = Vector3.Reflect(ballRb.velocity.normalized, hit.normal).normalized;
-                    ballRb.AddForce(reflection * nudgeForce, ForceMode.Impulse);
+                    // We'll gently nudge the ball out of tunneling.
+                    // Reflection of its velocity to mimic a bounce direction.
+                    Vector3 reflectionDir = Vector3.Reflect(ballRb.velocity.normalized, hit.normal).normalized;
+                    
+                    // Add minimal force so we don't "bullet" the ball.
+                    ballRb.AddForce(reflectionDir * nudgeForce, ForceMode.Impulse);
 
                     if (debugLogs)
                     {
-                        Debug.Log($"Capsule sweep detected collision with ball at {hit.point}, applying nudge force.");
+                        Debug.Log($"Capsule sweep detected ball at {hit.point}, applying nudge {nudgeForce}");
                     }
                 }
             }
         }
 
-        // Visualize the capsule sweep in the Scene view for debugging
+        // For debug: visualize the capsule path.
         if (showDebugCapsule)
         {
-            Debug.DrawLine(start, end, Color.green);
-            Debug.DrawRay(hit.point, hit.normal * 0.2f, Color.red);
+            Debug.DrawLine(startPos, endPos, Color.green);
+        }
+    }
+
+    /// <summary>
+    /// OnCollisionEnter is mostly left for logging or tiny force corrections,
+    /// because we let the PhysicMaterial handle bounces naturally.
+    /// </summary>
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Ball"))
+        {
+            // By default, do nothing – rely on PhysicMaterials for bounce.
+            // Optionally apply a very small impulse if you want extra "pop" 
+            // (but keep it minimal to avoid bullet hits).
+            //
+            // Example:
+            // Rigidbody ballRb = collision.collider.attachedRigidbody;
+            // if (ballRb != null) { ballRb.AddForce(collision.contacts[0].normal * 0.5f, ForceMode.Impulse); }
+
+            if (debugLogs)
+                Debug.Log("Paddle collided with ball - letting PhysicMaterial handle bounce.");
         }
     }
 }
