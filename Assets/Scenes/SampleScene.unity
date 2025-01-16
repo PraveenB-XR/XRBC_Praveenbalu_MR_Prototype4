@@ -4509,7 +4509,7 @@ GameObject:
   - component: {fileID: 321402865}
   - component: {fileID: 321402864}
   - component: {fileID: 321402863}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: '[BuildingBlock] HandGrab'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7444,7 +7444,7 @@ Transform:
   m_GameObject: {fileID: 544911982}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.70710576, z: -0, w: 0.7071079}
-  m_LocalPosition: {x: 1.724, y: 0.674, z: -0.02}
+  m_LocalPosition: {x: 1.724, y: 0.619, z: -0.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7974,17 +7974,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 6691978d553a9ae4c8401c7076ef2a9a,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6691978d553a9ae4c8401c7076ef2a9a,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6691978d553a9ae4c8401c7076ef2a9a,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6691978d553a9ae4c8401c7076ef2a9a,
         type: 3}
@@ -8010,6 +8010,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: 'Table Tennis Racket '
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6691978d553a9ae4c8401c7076ef2a9a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8038,7 +8043,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6691978d553a9ae4c8401c7076ef2a9a,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 583867864}
+      addedObject: {fileID: 583867867}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6691978d553a9ae4c8401c7076ef2a9a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 583867868}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6691978d553a9ae4c8401c7076ef2a9a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 583867869}
   m_SourcePrefab: {fileID: 100100000, guid: 6691978d553a9ae4c8401c7076ef2a9a, type: 3}
 --- !u!1 &583867853 stripped
 GameObject:
@@ -8060,7 +8073,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 583867853}
   serializedVersion: 4
-  m_Mass: 0.5
+  m_Mass: 0.05
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -8074,11 +8087,11 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 2
+  m_CollisionDetection: 3
 --- !u!114 &583867857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8115,7 +8128,30 @@ MonoBehaviour:
   maxHitForce: 50
   controller: 2
   velocitySmoothing: 0.1
---- !u!64 &583867864
+--- !u!114 &583867867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583867853}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e31b82975ec96f4a965da1ee3c712d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raysAlongWidth: 6
+  raysAlongHeight: 6
+  rayDistance: 0.09
+  paddleWidth: 0.15
+  paddleHeight: 0.15
+  localOffset: {x: -0.14, y: 0, z: 0.1}
+  minHitSpeed: 4
+  baseHitForce: 7
+  maxHitForce: 10
+  bounceFactor: 1
+  showDebugRays: 1
+--- !u!64 &583867868
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8137,6 +8173,30 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2380562132491229981, guid: 6691978d553a9ae4c8401c7076ef2a9a, type: 3}
+--- !u!114 &583867869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583867853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2edef937c7c9ede45bef2962ee0a7ecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vrHand: {fileID: 50406549}
+  followSpeed: 100
+  maxPaddleSpeed: 0.1
+  useFallbackRaycast: 1
+  rayCountWidth: 10
+  rayCountHeight: 10
+  rayDistance: 0.5
+  nudgeImpulse: 0.48
+  minPaddleSpeedForNudge: 3
+  directionBlend: 0.604
+  showDebugRays: 1
+  debugLogs: 1
 --- !u!1 &583942384
 GameObject:
   m_ObjectHideFlags: 0
@@ -10714,7 +10774,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.3871982, y: 0.402, z: 0.29951787}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 0.87867004, y: 0.87867004, z: 0.87867004}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -12523,7 +12583,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 972636115}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Attach Transform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25083,6 +25143,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1929961385}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 679675a98e350cf4db4c8d9aa82d8662,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1929961386}
   m_SourcePrefab: {fileID: 100100000, guid: 679675a98e350cf4db4c8d9aa82d8662, type: 3}
 --- !u!1 &1929961377 stripped
 GameObject:
@@ -25169,6 +25233,19 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.19980986
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1929961386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1929961377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69a388a2adab5f849b5d81169abe6c19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxBallSpeed: 15
 --- !u!1 &1943418339
 GameObject:
   m_ObjectHideFlags: 0
@@ -26108,7 +26185,7 @@ MonoBehaviour:
   ballPrefab: {fileID: 5197021091505558757, guid: a4b2daa0b68b5774e902128022a20eb3,
     type: 3}
   targetPosition: {fileID: 1825536538}
-  shootSpeed: 7
+  shootSpeed: 12.46
   shootInterval: 2
 --- !u!23 &2012242147
 MeshRenderer:
@@ -28072,6 +28149,61 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1066930881}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2115890251
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2115890253}
+  - component: {fileID: 2115890252}
+  m_Layer: 6
+  m_Name: Paddle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &2115890252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2115890251}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e31b82975ec96f4a965da1ee3c712d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raysAlongWidth: 5
+  raysAlongHeight: 5
+  rayDistance: 0.1
+  paddleWidth: 0.15
+  paddleHeight: 0.15
+  localOffset: {x: 0, y: 0, z: 0}
+  minHitSpeed: 1
+  baseHitForce: 15
+  maxHitForce: 25
+  bounceFactor: 1
+  showDebugRays: 1
+--- !u!4 &2115890253
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2115890251}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.305, y: 0.815, z: 0.157}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2115928445
 GameObject:
   m_ObjectHideFlags: 0
@@ -28937,6 +29069,7 @@ SceneRoots:
   - {fileID: 1929961376}
   - {fileID: 2022015013}
   - {fileID: 583867852}
+  - {fileID: 2115890253}
   - {fileID: 291374508}
   - {fileID: 832211360}
   - {fileID: 2084564343}

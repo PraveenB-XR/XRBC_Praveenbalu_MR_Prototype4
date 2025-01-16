@@ -85,8 +85,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 679675a98e350cf4db4c8d9aa82d8662,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 679675a98e350cf4db4c8d9aa82d8662,
+        type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 679675a98e350cf4db4c8d9aa82d8662,
+        type: 3}
+      propertyPath: m_TagString
+      value: Ball
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -100,6 +110,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2167669124967615033}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 679675a98e350cf4db4c8d9aa82d8662,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7338689392960607361}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 679675a98e350cf4db4c8d9aa82d8662,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5445072111636823920}
   m_SourcePrefab: {fileID: 100100000, guid: 679675a98e350cf4db4c8d9aa82d8662, type: 3}
 --- !u!1 &5197021091505558757 stripped
 GameObject:
@@ -115,9 +133,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5197021091505558757}
   serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Mass: 0.03
+  m_Drag: 0.05
+  m_AngularDrag: 0.02
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -131,7 +149,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
 --- !u!135 &2167669124967615033
@@ -155,3 +173,29 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.19980986
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7338689392960607361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5197021091505558757}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d2edf21bcab2e9469f7d9d50ded2bff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSpeed: 30
+--- !u!114 &5445072111636823920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5197021091505558757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69a388a2adab5f849b5d81169abe6c19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxBallSpeed: 8
